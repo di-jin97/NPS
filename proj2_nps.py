@@ -1,8 +1,14 @@
 ## proj_nps.py
 ## Skeleton for Project 2 for SI 507
 ## ~~~ modify this file, but don't rename it ~~~
-from secrets import google_places_key
+from secrets import *
+import json
+import requests
+from bs4 import BeautifulSoup
 
+
+
+google_places_key = 'AIzaSyD68GvQhww_vaKhrB-1GVNqPH4MYWhWMfU'
 ## you can, and should add to and modify this class any way you see fit
 ## you can add attributes and modify the __init__ parameters,
 ##   as long as tests still pass
@@ -20,6 +26,9 @@ class NationalSite():
         self.address_city = 'Smallville'
         self.address_state = 'KS'
         self.address_zip = '11111'
+        
+        self.lat = 0
+        self.lng = 0
 
 ## you can, and should add to and modify this class any way you see fit
 ## you can add attributes and modify the __init__ parameters,
@@ -37,8 +46,27 @@ class NearbyPlace():
 ##        (e.g., National Parks, National Heritage Sites, etc.) that are listed
 ##        for the state at nps.gov
 def get_sites_for_state(state_abbr):
-    return []
-
+    state_abbr = state_abbr.lower()
+    baseurl = f"https://www.nps.gov/state/{state_abbr}/index.htm"
+    page_text = requests.get(baseurl).text
+    page_soup = BeautifulSoup(page_text, 'html.parser')
+    content = page_soup.find(id="list_parks")
+    parklist = content.find_all(class_="clearfix")
+    for each in parklist:
+        category = each.find("h2")
+        name = each.find("h3")
+        desc = each.find("p")
+        print(name.text,category.text,desc.text)
+        eachabbr = each.find('a')['href'] 
+        eachurl = f'https://www.nps.gov{eachabbr}index.htm'
+        detail_page = requests.get(eachurl).text
+        page_soup = BeautifulSoup(detail_page, 'html.parser')
+        address = page_soup.find(class_="adr").text
+        address = address.replace('\n', ', ')
+        print(address)
+        
+    
+get_sites_for_state("mi")
 
 ## Must return the list of NearbyPlaces for the specific NationalSite
 ## param: a NationalSite object

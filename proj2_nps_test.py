@@ -1,4 +1,4 @@
-from 507_waiver import *
+from proj2_nps import *
 import unittest
 
 class TestStateSearch(unittest.TestCase):
