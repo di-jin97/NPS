@@ -1,2 +1,3 @@
 # put your google api key here
 google_places_key = 'AIzaSyA7SpYbjtVmddhKpJXvgZ32W2uCkAxPI4E'
+mapbox_access_token = "pk.eyJ1IjoicHJpbmNpcGxleiIsImEiOiJjam1taTE3dGowamRjM3FqcG50MGp0anEwIn0.XuaFZy4Tff6aTfjiQUdd9Q"
